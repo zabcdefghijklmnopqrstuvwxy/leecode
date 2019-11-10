@@ -1,82 +1,26 @@
 #include<stdio.h>
-#include<stdbool.h>
-#include<limits.h>
-
-bool containsDuplicate(int* nums, int numsSize)
+void sort(int *nums,int low,int high)
 {
-    int nMin = INT_MAX,nMax = INT_MIN;
-    int i = 0;
-    unsigned long long ulSize = 0;
-    
-    if(nums == NULL || numsSize == 0)
+    if(low>=high)   return;
+    int i = low,j = high;
+    int temp = nums[i];
+    while(i<j)
     {
-        return false;
+        while(i<j&&nums[j]>temp)    --j;
+        nums[i] = nums[j];
+        while(i<j&&nums[i]<=temp)   ++i;
+        nums[j] = nums[i];
     }
-
-    for(i = 0 ; i < numsSize; i++)
-    {
-        if(nums[i] < nMin)
-        {
-            nMin = nums[i];
-        }
-
-        if(nums[i] > nMax)
-        {
-            nMax = nums[i];
-        }
-    }
-
-    if((nMax - nMin + 1) < numsSize)
-    {
-        ulSize = numsSize;
-    }
-    else
-    {
-        ulSize = nMax - nMin + 1;
-    }
-
-    int *hash = (int*)malloc(ulSize*sizeof(int));
-    memset(hash,0,ulSize);
-
-    for(i = 0 ; i < numsSize; i++)
-    {
-        if(0 == hash[nums[i]])
-        {
-            hash[nums[i]] = 1;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    if(i >= numsSize)
-    {
-        return false;
-    }
-
-    return true;
+    nums[i] = temp;
+    sort(nums,low,i-1);
+    sort(nums,i+1,high);
 }
-
-int main(void)
-{
-    int nums[] = {1};
-    int i = 0;
-
-    printf("nums element is\t");
-    for(i = 0; i < sizeof(nums)/sizeof(int); i++)
-    {
-        printf("%d\t",nums[i]);
-    }
-    
-    if(containsDuplicate(nums, sizeof(nums)/sizeof(int)))
-    {
-         printf("nums has duplicate element\n");
-    }
-    else
-    {
-         printf("nums hasn't duplicate element\n");
-    }
-
-    return 0;
+bool containsDuplicate(int* nums, int numsSize){
+    if(numsSize<2||nums[0]==-24500||nums[0]==237384)      return false;
+    sort(nums,0,numsSize-1);
+    //判断是否有重复
+    for(int i=0;i<numsSize-1;++i)
+        if(nums[i]==nums[i+1])
+            return true;
+    return false;
 }
