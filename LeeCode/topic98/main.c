@@ -10,70 +10,43 @@ struct TreeNode {
     struct TreeNode *right;
 };
 
-#if 0
+/*
+*@brief 可以考虑用中序遍历的方式，数值符合升序则成功 
+*/
 bool isValidBST(struct TreeNode* root)
 {
-    if(NULL == root)
-    {
-        return false;
-    }
-
-    while()
-
-
-    if(root->left != NULL)
-    {
-	    if(root->left->val >= root->val)
-        {
-            return false;
-        }
-    }
-
-    if(root->right != NULL)
-    {
-	    if(root->right->val <= root->val)
-        {
-            return false;
-        }
-    }
-
-    return isValidBST(root->left) && isValidBST(root->right);
-}
-#endif
-
-bool isValidBST(struct TreeNode* root)
-{
-    static int nFlag = 1;
-    static int nMiddVal = 0;
+     bool result = true;
+    struct TreeNode* node;
     
-    if(NULL == root)
-    {
-        return true;
+    if(!root) return true;
+    // rule 3
+    if(root->left){
+        result &= isValidBST(root->left) && (root->val > root->left->val);
     }
-
-    if(nFlag == 1)
-    {
-        nFlag = 0;
-        nMiddVal = root->val;
+    if(root->right){
+        result &= isValidBST(root->right) && (root->val < root->right->val);
     }
-    
-    if(root->left != NULL)
-    {
-	    if(root->left->val >= root->val || root->left->val >= nMiddVal)
-        {
+    //rule 1
+    if(result && root->left){
+        node = root->left;
+        while(node->right){
+            node = node->right;
+        }
+        if(node->val >= root->val){
             return false;
         }
     }
-
-    if(root->right != NULL)
-    {
-	    if(root->right->val <= root->val || root->right->val <= nMiddVal)
-        {
+    //rule 2
+    if(result && root->right){
+        node = root->right;
+        while(node->left){
+            node = node->left;
+        }
+        if(node->val <= root->val){
             return false;
         }
     }
-
-    return isValidBST(root->left) && isValidBST(root->right);
+    return result;
 }
 
 int main(void)
