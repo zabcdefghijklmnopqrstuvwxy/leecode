@@ -1,121 +1,22 @@
 #include<stdio.h>
 
 char * addBinary(char * a, char * b){
-    int nLen1 = 0;
-    int nLen2 = 0;
-    int nLenRet = 0;
-    int i = 0;
-    int nOv = 0;
-
-    nLen1 = strlen(a);
-    nLen2 = strlen(b);
-
-    if(nLen1 == nLen2)
-    {
-        nLenRet = nLen1;
-    }
-    else 
-    {
-        if(nLen1 > nLen2)
-        {
-            nLenRet = nLen1 + 1;
-        }
-        else
-        {
-            nLenRet = nLen2 + 1;
-        }
-    }
-
-    char *sRet = (char*)malloc(nLenRet);
-    memset(sRet,0,nLenRet);
-
-    if(NULL == sRet)
-    {
-        return NULL;
-    }
-
-    while(i < nLen1 || i < nLen2)
-    {
-        if(i < nLen1 && i < nLen2)
-        {
-            if(a[nLen1 - i - 1] - 48 + b[nLen2 - i - 1] - 48 + nOv == 2)
-            {
-                sRet[nLenRet - i -1] = '0';
-                nOv = 1;
-            }
-            else if(a[nLen1 - i - 1] - 48 + b[nLen2 - i - 1] - 48 + nOv == 1)
-            {
-                sRet[nLenRet - i -1] = '1';
-                nOv = 0;
-            }
-            else if(a[nLen1 - i - 1] - 48 + b[nLen2 - i - 1] - 48 + nOv == 0)
-            {
-                sRet[nLenRet - i -1] = '0';
-                nOv = 0;
-            }
-            else
-            {
-
-            }
-        }
-
-        if(i >= nLen1 && i < nLen2)
-        {
-            if(b[nLen2 - i - 1] - 48 + nOv == 2)
-            {
-                sRet[nLenRet - i -1] = '0';
-                nOv = 1;
-            }
-            else if(b[nLen2 - i - 1] - 48 + nOv == 1)
-            {
-                sRet[nLenRet - i -1] = '1';
-                nOv = 0;
-            }
-            else if(b[nLen2 - i - 1] - 48 + nOv == 0)
-            {
-                sRet[nLenRet - i -1] = '0';
-                nOv = 0;
-            }
-            else
-            {
-
-            }
-        }
-        if(i >= nLen2 && i < nLen1)
-        {
-            if(a[nLen1 - i - 1] - 48 + nOv == 2)
-            {
-                sRet[nLenRet - i -1] = '0';
-                nOv = 1;
-            }
-            else if(a[nLen1 - i - 1] - 48 + nOv == 1)
-            {
-                sRet[nLenRet - i -1] = '1';
-                nOv = 0;
-            }
-            else if(a[nLen1 - i - 1] - 48 + nOv == 0)
-            {
-                sRet[nLenRet - i -1] = '0';
-                nOv = 0;
-            }
-            else
-            {
-
-            }
-        }
-
-        ++i;
-    }
+    int i = strlen(a);
+    int j = strlen(b);
     
-    if(nOv)
-    {
-        sRet[nLenRet - i - 1] = '1';
-        nOv = 0;
+    int len = i > j? i: j;
+    char* res = (char*)malloc(sizeof(char) * (len + 2));
+    res[++len] = 0;
+    
+    char carry = '0';
+    char pa, pb;
+    while(len > 1 || carry == '1') {
+        pa = i > 0? a[--i]: '0';
+        pb = j > 0? b[--j]: '0';
+        res[--len] = pa ^ pb ^ carry; // 当前位
+        carry = (pa & carry) | (pb & carry) | (pa & pb); //进位
     }
-
-//    sRet[nLenRet - 1] = '\0';
-
-    return sRet;
+    return res + len;
 }
 
 int main(void)
