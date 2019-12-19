@@ -1,52 +1,22 @@
 #include<stdio.h>
 
+
+/*
+* @brief 贪婪算法，局部最优解即全局最优解。找出步长最长的即跳转最少
+*/
 int jump(int* nums, int numsSize)
 {
-    int nMaxStep = 0;
-    int nNextStep = 0;
-    int nCurStep = 0;
-    int nTmpStep = 0;
-    int nStepCnt = 0;
-    int nFlag = 0;
-    int nSuitNext = 0;
-
-    if(numsSize < 2)
+      int step=0;
+    for(int i=0, maxpos=0, curpos=0; i < numsSize; ++i)
     {
-        return 0;
-    }
-
-    while(nMaxStep <= numsSize)
-    {
-        nNextStep = nums[nCurStep];
-        while(nNextStep)
-        {
-            if(nNextStep < numsSize)
-            {
-                nTmpStep = nums[nCurStep + nNextStep];
-                if(nNextStep + nTmpStep > nMaxStep)
-                {
-                    nSuitNext = nNextStep;
-                    nMaxStep = nNextStep + nTmpStep;
-                }
-            }
-            else
-            {
-                nFlag = 1;
-                break;
-            }
-            nNextStep--;
-        }
-
-        nCurStep = nSuitNext + nCurStep; 
-        nStepCnt = nStepCnt + 1;
-        if(nFlag)
-        {
-            break;
-        }
-     }
-
-    return nStepCnt;
-
+        if (i>curpos)
+        {  
+	        curpos = maxpos;
+	        ++step;
+	    }
+	    maxpos = maxpos > (i + nums[i]) ? maxpos : (i + nums[i]);
+	}
+	return step;
 }
 
 int main(void)
