@@ -1,8 +1,10 @@
 #include<stdio.h>
 
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
+
+/*
+* @brief 使用额外空间开销哈希表判重，时间复杂度为O(n)，空间复杂度为O(n)，
+* 该方法不符合leecode空间复杂度要求。只能作为参考。
+*/ 
 int* findDuplicates(int* nums, int numsSize, int* returnSize){
     int i = 0;
     int nCnt = 0;
@@ -29,6 +31,33 @@ int* findDuplicates(int* nums, int numsSize, int* returnSize){
     free(dup);
     *returnSize = nCnt;
     return nums;
+}
+
+/*
+* @brief 使用自身数值作为索引，将相应索引数值取反，如果为正则说明
+* 重复元素。时间复杂度为O(n)，空间复杂度为O(1)，符合leecode要求。
+*/ 
+int* findDuplicates(int* nums, int numsSize, int* returnSize){
+    if(numsSize < 2)
+    {
+        *returnSize = 0;
+        return NULL;
+    }
+
+    int *dup = (int*)malloc(sizeof(int)*numsSize);
+    int i = 0;
+    int nIndex = 0;
+    for(i = 0 ; i < numsSize; i++)
+    {      
+        nums[abs(nums[i]) - 1] = -1*nums[abs(nums[i]) - 1];
+        if(nums[abs(nums[i]) - 1] > 0)
+        {
+            dup[nIndex++] = abs(nums[i]);
+        }
+    }
+
+    *returnSize = nIndex;
+    return dup;
 }
 
 int main(void)
